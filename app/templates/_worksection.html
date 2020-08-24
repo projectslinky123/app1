@@ -1,0 +1,18 @@
+    <table>
+        <tr valign="top">
+            <td>
+                <h2>{{ work.title }}</h2>
+                <h4>{{ work.subtitle }}</h4>
+                {{ work.from }} to {% if work.to %} {{ work.to }} {% else %} present {% endif %}
+                {% if work.body %}<p>{{ work.body }}</p>{% endif %}
+
+                {% if work.techused %}
+                    <h4>Technolies/Tools Used:</h4>
+                    <ul>
+                    {% for tech in work.techused %}
+                        <li>{{tech}}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+        </tr>
+    </table>

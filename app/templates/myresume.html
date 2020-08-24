@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+    <table class="table table-hover">
+        <tr>
+            <td>
+                <h1>{{ user.fname }} {{ user.lname }}</h1>
+                {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+            </td>
+        </tr>
+    </table>
+    {% for work in workexp %}
+        {% include '_worksection.html' %}
+        <br>
+    {% endfor %}
+    <br>
+    {% for work in education %}
+        {% include '_worksection.html' %}
+        <br>
+    {% endfor %}
+    </div>
+{% endblock %}
