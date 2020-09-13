@@ -9,8 +9,8 @@ def index():
 
 @app.route('/weather')
 def weather():
-    user = {'username': 'Suraj'}
-    return render_template('weather.html', title='Weather', user=user)
+    weather = {'temperature': '75'}
+    return render_template('weather.html', title='Weather', weather=weather)
 
 @app.route('/aboutme')
 def aboutme():
