@@ -7,6 +7,11 @@ def index():
     user = {'username': 'Suraj'}
     return render_template('index.html', title='Home', user=user)
 
+@app.route('/weather')
+def weather():
+    user = {'username': 'Suraj'}
+    return render_template('weather.html', title='Weather', user=user)
+
 @app.route('/aboutme')
 def aboutme():
     user = {'fname': 'Suraj'
