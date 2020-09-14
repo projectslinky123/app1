@@ -1,5 +1,9 @@
 from flask import render_template
 from app import app
+import time
+import requests
+import json
+import os
 
 @app.route('/')
 @app.route('/index')
@@ -9,8 +13,14 @@ def index():
 
 @app.route('/weather')
 def weather():
-    weather = {'temperature': '75'}
-    return render_template('weather.html', title='Weather', weather=weather)
+    api_key = os.environ.get('OPEN_WEATHER_API_KEY')
+    lat = "43.073051"
+    lon = "-89.401230"
+    url = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&appid=" + api_key
+    response = requests.get(url)
+    data = json.loads(response.text)
+    hrstart = int(time.strftime("%H", time.localtime(data["hourly"][0]["dt"])))
+    return render_template('weather.html', title='Weather', all=data["hourly"], offset=data["timezone_offset"], hrstart=hrstart)
 
 @app.route('/aboutme')
 def aboutme():

@@ -4,14 +4,25 @@
     <div class="container">
     <table class="table table-hover">
         <tr>
-            <td>
-                <h1> There current Termperature in madison is {{ weather.temperature }}</h1>
-            </td>
+            <td><h1>hour</h1></td>
+            <td><h1>weather</h1></td>
+            <td><h1>Temp (f)</h1></td>
+            <td><h1>Feels Like (f)</h1></td>
+            <td><h1>Wind Speed</h1></td>
         </tr>
+            {% for h in range(hrstart,hrstart+48) %}
+                    <tr><td>{% if h-24*(h//24) <= 12 %}
+                            {{ h-24*(h//24) }}<br/>am
+                        {% else %}
+                            {{ h-12*(h//12) }}<br/>pm
+                        {% endif %}</td>
+                        <td><img src="http://openweathermap.org/img/wn/{{ all[h-hrstart].weather[0].icon }}@2x.png" style="width:64px;height:64px;">{{ all[h-hrstart].weather[0].description }}</td>
+                        <td>{{ all[h-hrstart].temp }}</td>
+                        <td>{{ all[h-hrstart].feels_like }}</td>
+                        <td>{{ all[h-hrstart].wind_speed }}</td>
+                        </tr>
+            {% endfor %}
     </table>
-      {% for post in posts %}
-        {% include '_post.html' %}
     <br>
-    {% endfor %}
     </div>
 {% endblock %}
