@@ -1,9 +1,17 @@
-from flask import render_template
-from app import app
-import time
-import requests
+import base64
+import io
 import json
 import os
+import time
+import math
+
+import requests
+from app import app
+from flask import render_template
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+#from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+
 
 @app.route('/')
 @app.route('/index')
@@ -11,16 +19,61 @@ def index():
     user = {'username': 'Suraj'}
     return render_template('index.html', title='Home', user=user)
 
+
 @app.route('/weather')
 def weather():
-    api_key = os.environ.get('OPEN_WEATHER_API_KEY')
+    api_key = app.config['OPEN_WEATHER_API_KEY']
+    api_url = app.config['OPEN_WEATHER_ONECALL_URL']
     lat = "43.073051"
     lon = "-89.401230"
-    url = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&appid=" + api_key
+    url = api_url+"?lat="+lat+"&lon="+lon+"&units=imperial&appid=" + api_key
     response = requests.get(url)
     data = json.loads(response.text)
     hrstart = int(time.strftime("%H", time.localtime(data["hourly"][0]["dt"])))
     return render_template('weather.html', title='Weather', all=data["hourly"], offset=data["timezone_offset"], hrstart=hrstart)
+
+
+@app.route('/graph')
+def graph():
+    desc_request_url = "https://api.stlouisfed.org/fred/series"
+    request_url = "https://api.stlouisfed.org/fred/series/observations"
+    payload = {"api_key": os.environ.get('fred_apikey'),
+               "series_id": "W006RC1A027NBEA",
+               "file_type": "json"}
+    response1 = requests.get(desc_request_url, params=payload)
+    data1 = response1.json()
+    response = requests.get(request_url, params=payload)
+    data = response.json()
+    xlist = []
+    ylist = []
+    for k in range(len(data["observations"])):
+        xlist.append(data["observations"][k]["date"])
+        ylist.append(math.floor(float(data["observations"][k]["value"])))
+
+    fig = create_figure("year", data1["seriess"][0]["units"], xlist, ylist)
+    return render_template('testgraph.html', title=data1["seriess"][0]["title"], data=data["observations"], dt=data1
+                           , val=data, fig=fig)
+
+
+@app.route('/aboutproject')
+def aboutproject():
+    projectdata = [
+        {'num': '1'
+            , 'name': 'Weather'
+            , 'description': 'CCDS'
+            , 'data from': app.config['OPEN_WEATHER_ONECALL_URL']
+            , 'techused': ['SQL', 'DBAmp']
+         },
+        {'num': '2'
+            , 'name': 'Weather'
+            , 'subtitle': 'SWF'
+            , 'body': 'Test post #2'
+            , 'from': '2012'
+            , 'to': '2014'
+         }
+    ]
+    return render_template('aboutproject.html', projectdata=projectdata)
+
 
 @app.route('/aboutme')
 def aboutme():
@@ -59,3 +112,31 @@ def aboutme():
          }
     ]
     return render_template('myresume.html', title='About me', user=user, workexp=workexp, education=education)
+
+
+def create_figure(xtitle, ytitle, x, y):
+    fig = plt.figure(figsize=(15, 5))
+    axis = fig.add_subplot(1, 1, 1)
+    axis.set_xlabel(xtitle)
+    axis.set_ylabel(ytitle)
+    axis.grid()
+    axis.plot(list(map(int, y)))
+    xlabels = [""]
+    xticks = [0]
+    spacing = len(x)//10
+    for i in range(11):
+        xticks.append(spacing*i)
+        xlabels.append(x[spacing*i])
+
+    axis.set_xticks(xticks)
+    axis.set_xticklabels(xlabels, rotation=70)
+    fig.tight_layout()
+
+    # Convert plot to PNG image
+    pngImage = io.BytesIO()
+    FigureCanvas(fig).print_png(pngImage)
+
+    # Encode PNG image to base64 string
+    pngImageB64String = "data:image/png;base64,"
+    pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
+    return pngImageB64String
