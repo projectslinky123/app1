@@ -11,16 +11,28 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info" role="alert">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
 
-        {# application content needs to be provided in the app_content block #}
-        {% block app_content %}{% endblock %}
+<div class="container-fluid">
+    <div class="row row-offcanvas row-offcanvas-left">
+        {#  <!-- <div class="col-sm-1 sidebar-offcanvas" id="sidebar" role="navigation">
+        {{ sidebar }}
+        </div> --> #}
+         {# application content needs to be provided in the app_content block #}
+        <div class="col-sm-11">
+            <div class="container-fluid">
+                {% block app_content %}
+                {% endblock %}
+            </div>
+        </div>
+
     </div>
+</div>
+
 {% endblock %}

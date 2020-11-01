@@ -1,1 +1,44 @@
 {% extends "base.html" %}
+
+{% block app_content %}
+
+    <div class="container">
+    <h3>About Me</h3>
+    <p>Hello, I currently work on Systems Design and T-SQL development.
+        I am interested in Data Engineering and back-end programming
+        This is my project site and it lists some of my personal projects</p>
+    </div>
+
+    <div class="container">
+        <h3>About the Site</h3>
+        <p>The project is hosted in a VM on Google Cloud Platform</p>
+        <p>GitHub: <a href="https://github.com/projectslinky123/app1" target="_blank">https://github.com/projectslinky123/app1</a></p>
+        <p>Language Used: Python</p>
+        <p>Packages Used:
+            <div class="container">
+            <table class="table table-hover table-sm">
+                <tr><th class="col-sm-2">Package Name</th><th class="col-sm-2">Used For</th><th class="col-sm-8">Description</th></tr>
+                {% for row in pkgs %}
+                <tr>
+                    <td>{{ row["name"] }}</td>
+                    <td>{{ row["use"] }}</td>
+                    <td>{{ row["description"] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            </div>
+        </p>
+        <p>Other Technology Used:</p>
+        <div class="container">
+            <table class="table table-hover table-sm">
+                <tr><th class="col-sm-2">Name</th><th class="col-sm-2">Used For</th><th class="col-sm-8">Description</th></tr>
+                <tr>
+                    <td>HTTPS Anywhere</td>
+                    <td>To enable HTTPS</td>
+                    <td>Provides HTTPS certificates</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

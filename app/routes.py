@@ -9,7 +9,6 @@ import requests
 from app import app
 from flask import render_template
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-#from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
 
@@ -17,7 +16,27 @@ import matplotlib.pyplot as plt
 @app.route('/index')
 def index():
     user = {'username': 'Suraj'}
-    return render_template('index.html', title='Home', user=user)
+    pkgs = [
+        {'name': 'flask',
+         'use': 'Base Framework',
+         'description': 'Base Framework'},
+        {'name': 'flask-Bootstrap',
+         'use': 'For a cleaner and better looking front-end',
+         'description': 'For a cleaner and better looking front-end'},
+        {'name': 'Jinja2',
+         'use': 'Managing the front end pages using templates',
+         'description': 'Jinja is a fast, expressive, extensible templating engine. Special placeholders in the template allow writing code similar to Python syntax. Then the template is passed data to render the final document.'},
+        {'name': 'matplotlib',
+         'use': 'Generating graphs',
+         'description': 'Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python'},
+        {'name': 'python-dotenv',
+         'use': 'Loading environment variables from a file',
+         'description': 'Reads the key-value pair from .env file and adds them as environment variables'},
+        {'name': 'requests',
+         'use': 'for sending HTTP/1.1 requests',
+         'description': 'Sending HTTP/1.1 requests'}
+    ]
+    return render_template('index.html', title='Home', user=user, pkgs=pkgs)
 
 
 @app.route('/weather')
@@ -35,8 +54,8 @@ def weather():
 
 @app.route('/graph')
 def graph():
-    desc_request_url = "https://api.stlouisfed.org/fred/series"
-    request_url = "https://api.stlouisfed.org/fred/series/observations"
+    desc_request_url = app.config['FRED_SERIES_URL']
+    request_url = app.config['FRED_SERIES_DATA_URL']
     payload = {"api_key": os.environ.get('fred_apikey'),
                "series_id": "W006RC1A027NBEA",
                "file_type": "json"}
