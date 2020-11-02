@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username': 'Suraj'}
     pkgs = [
         {'name': 'flask',
          'use': 'Base Framework',
@@ -36,7 +35,7 @@ def index():
          'use': 'for sending HTTP/1.1 requests',
          'description': 'Sending HTTP/1.1 requests'}
     ]
-    return render_template('index.html', title='Home', user=user, pkgs=pkgs)
+    return render_template('index.html', title='Home', pkgs=pkgs)
 
 
 @app.route('/weather')
@@ -96,8 +95,8 @@ def aboutproject():
 
 @app.route('/aboutme')
 def aboutme():
-    user = {'fname': 'Suraj'
-            , 'lname': 'Ramesh'}
+    user = {'fname': ''
+            , 'lname': ''}
     workexp = [
         {'postnum': '1'
             , 'title': 'Systems Analyst'
