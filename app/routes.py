@@ -22,7 +22,7 @@ def index():
         {'name': 'flask-Bootstrap',
          'use': 'For a cleaner and better looking front-end',
          'description': 'For a cleaner and better looking front-end'},
-        {'name': 'Jinja2',
+        {'name': 'jinja2',
          'use': 'Managing the front end pages using templates',
          'description': 'Jinja is a fast, expressive, extensible templating engine. Special placeholders in the template allow writing code similar to Python syntax. Then the template is passed data to render the final document.'},
         {'name': 'matplotlib',
@@ -32,7 +32,7 @@ def index():
          'use': 'Loading environment variables from a file',
          'description': 'Reads the key-value pair from .env file and adds them as environment variables'},
         {'name': 'requests',
-         'use': 'for sending HTTP/1.1 requests',
+         'use': 'Sending HTTP/1.1 requests',
          'description': 'Sending HTTP/1.1 requests'}
     ]
     return render_template('index.html', title='Home', pkgs=pkgs)
