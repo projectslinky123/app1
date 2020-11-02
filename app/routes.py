@@ -30,7 +30,7 @@ def index():
          'description': 'Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python'},
         {'name': 'python-dotenv',
          'use': 'Loading environment variables from a file',
-         'description': 'Reads the key-value pair from .env file and adds them as environment variables'},
+         'description': 'Reads the key-value pairs from a .env file and adds them as environment variables'},
         {'name': 'requests',
          'use': 'Sending HTTP/1.1 requests',
          'description': 'Sending HTTP/1.1 requests'}
