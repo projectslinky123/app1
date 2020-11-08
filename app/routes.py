@@ -1,15 +1,16 @@
 import base64
 import io
 import json
-import os
-import time
 import math
+import os
+import pandas as pd
+import time
 
+import matplotlib.pyplot as plt
 import requests
 from app import app
 from flask import render_template
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import matplotlib.pyplot as plt
 
 
 @app.route('/')
@@ -47,8 +48,11 @@ def weather():
     url = api_url+"?lat="+lat+"&lon="+lon+"&units=imperial&appid=" + api_key
     response = requests.get(url)
     data = json.loads(response.text)
-    hrstart = int(time.strftime("%H", time.localtime(data["hourly"][0]["dt"])))
-    return render_template('weather.html', title='Weather', all=data["hourly"], offset=data["timezone_offset"], hrstart=hrstart)
+
+    for v in data["hourly"]:
+        v["hr"] = time.strftime("%I %p", time.localtime(v["dt"]))
+
+    return render_template('weather.html', title='Weather', all=data["hourly"])
 
 
 @app.route('/graph')
