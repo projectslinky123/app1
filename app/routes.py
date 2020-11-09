@@ -3,7 +3,6 @@ import io
 import json
 import math
 import os
-import pandas as pd
 import time
 
 import matplotlib.pyplot as plt
