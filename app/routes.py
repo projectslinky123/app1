@@ -37,9 +37,11 @@ def index():
     ]
     return render_template('index.html', title='Home', pkgs=pkgs)
 
+
 @app.route('/contactme')
 def contactme():
     return render_template('contactme.html')
+
 
 @app.route('/weather')
 def weather():
