@@ -59,23 +59,9 @@ def weather():
 
 @app.route('/graph')
 def graph():
-    desc_request_url = app.config['FRED_SERIES_URL']
-    request_url = app.config['FRED_SERIES_DATA_URL']
-    payload = {"api_key": os.environ.get('fred_apikey'),
-               "series_id": "W006RC1A027NBEA",
-               "file_type": "json"}
-    response1 = requests.get(desc_request_url, params=payload)
-    data1 = response1.json()
-    response = requests.get(request_url, params=payload)
-    data = response.json()
-    xlist = []
-    ylist = []
-    for k in range(len(data["observations"])):
-        xlist.append(data["observations"][k]["date"])
-        ylist.append(math.floor(float(data["observations"][k]["value"])))
-
-    fig = create_figure("year", data1["seriess"][0]["units"], xlist, ylist)
-    return render_template('testgraph.html', title=data1["seriess"][0]["title"], data=data["observations"], dt=data1
+    title, data, xaxisLabel, yaxisLabel, xlist, ylist = getgraphdata("W006RC1A027NBEA")
+    fig = create_figure("year", yaxisLabel, xlist, ylist)
+    return render_template('testgraph.html', title=title, data=data["observations"]
                            , val=data, fig=fig)
 
 
@@ -164,3 +150,22 @@ def create_figure(xtitle, ytitle, x, y):
     pngImageB64String = "data:image/png;base64,"
     pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
     return pngImageB64String
+
+
+def getgraphdata(seriesId):
+    desc_request_url = app.config['FRED_SERIES_URL']
+    request_url = app.config['FRED_SERIES_DATA_URL']
+    payload = {"api_key": os.environ.get('fred_apikey'),
+               "series_id": seriesId,
+               "file_type": "json"}
+    response1 = requests.get(desc_request_url, params=payload)
+    data1 = response1.json()
+    response = requests.get(request_url, params=payload)
+    data = response.json()
+    xlist = []
+    ylist = []
+    for k in range(len(data["observations"])):
+        xlist.append(data["observations"][k]["date"])
+        ylist.append(math.floor(float(data["observations"][k]["value"])))
+
+    return data1["seriess"][0]["title"], data, "year", data1["seriess"][0]["units"], xlist, ylist
