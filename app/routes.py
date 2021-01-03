@@ -4,6 +4,7 @@ import json
 import math
 import os
 import time
+from datetime import datetime
 
 import matplotlib.pyplot as plt
 import requests
@@ -61,7 +62,7 @@ def weather():
 
 @app.route('/graph')
 def graph():
-    title, data, xaxisLabel, yaxisLabel, xlist, ylist = getgraphdata("W006RC1A027NBEA")
+    title, data, xaxisLabel, yaxisLabel, xlist, ylist = getgraphdata("A939RC0A052NBEA")
     fig = create_figure("year", yaxisLabel, xlist, ylist)
     return render_template('testgraph.html', title=title, data=data["observations"]
                            , val=data, fig=fig)
