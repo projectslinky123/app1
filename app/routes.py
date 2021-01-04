@@ -58,7 +58,7 @@ def weather():
     for v in data["hourly"]:
         v["hr"] = time.strftime("%I %p", time.localtime(v["dt"]))
 
-    return render_template('weather.html', title='Weather', all=data["hourly"])
+    return render_template('weather.html', title='Weather', all=data["hourly"], projectdesc="Data retreived from https://api.openweathermap.org")
 
 
 @app.route('/graph')
@@ -66,7 +66,7 @@ def graph():
     title, data, xaxisLabel, yaxisLabel, xlist, ylist = getgraphdata("A939RC0A052NBEA")
     fig = create_figure("year", yaxisLabel, xlist, ylist)
     return render_template('testgraph.html', title=title, data=data["observations"]
-                           , val=data, fig=fig)
+                           , val=data, fig=fig, projectdesc="Data retreived from https://api.stlouisfed.org/fred. The graph is built using the matplotlib package")
 
 
 @app.route('/scraper')

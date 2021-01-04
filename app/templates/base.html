@@ -25,12 +25,18 @@
        {#  <!--  {{ sidebar }} -->#}
         </div>
          {# application content needs to be provided in the app_content block #}
-        <div class="col-sm-11">
+        <div class="col-sm-9">
                 {% block app_content %}
                 {% endblock %}
         </div>
-
+        <div class="col-sm-2">
+            {% if projectdesc %}
+                {{ projectdesc }}
+            {% endif %}
+        </div>
     </div>
 </div>
+
+
 
 {% endblock %}
