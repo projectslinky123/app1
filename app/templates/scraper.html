@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <Big><Big>Table scraped from </Big> </Big> {{ url }}
+    <div class="text-center">
+    </div>
+</div>
+<br>
+<div class="container">
+    {{ data.to_html(index=False, classes="table table-hover table-sm")|safe }}
+</div>
+
+<div class="container">
+
+</div>
+{% endblock %}

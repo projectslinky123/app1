@@ -5,13 +5,14 @@ import math
 import os
 import time
 from datetime import datetime
+from app.fns.scraperfns import tabledatatodf, cleanupdata, getpagedata
 
 import matplotlib.pyplot as plt
 import requests
 from app import app
 from flask import render_template
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-
+from bs4 import BeautifulSoup
 
 @app.route('/')
 @app.route('/index')
@@ -66,6 +67,21 @@ def graph():
     fig = create_figure("year", yaxisLabel, xlist, ylist)
     return render_template('testgraph.html', title=title, data=data["observations"]
                            , val=data, fig=fig)
+
+
+@app.route('/scraper')
+def scraper():
+    url = "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)"
+    html = getpagedata(url)
+
+    soup = BeautifulSoup(html, "html.parser")
+    tabledata = soup.find('table', {'class': 'wikitable sortable jquery-tablesorter'})
+
+    df = tabledatatodf(tabledata)
+    df.columns = df.columns.to_series().apply(cleanupdata)
+    df = df.applymap(cleanupdata)
+    return render_template('scraper.html', title="Data scrapped from wikipedia"
+                           , url=url, data=df)
 
 
 @app.route('/aboutproject')
