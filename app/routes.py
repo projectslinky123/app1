@@ -18,6 +18,9 @@ from bs4 import BeautifulSoup
 @app.route('/index')
 def index():
     pkgs = [
+        {'name': 'beautifulsoup4',
+         'use': 'Data extraction',
+         'description': 'Beautiful Soup is a Python library for pulling data out of HTML and XML files'}
         {'name': 'flask',
          'use': 'Base Framework',
          'description': 'Base Framework'},
@@ -35,7 +38,10 @@ def index():
          'description': 'Reads the key-value pairs from a .env file and adds them as environment variables'},
         {'name': 'requests',
          'use': 'Sending HTTP/1.1 requests',
-         'description': 'Sending HTTP/1.1 requests'}
+         'description': 'Sending HTTP/1.1 requests'},
+        {'name': 'selenium webdriver',
+         'use': 'Scrapping page data',
+         'description': 'Selenium WebDriver drives a browser natively, as a real user would, either locally or on remote machines.It is most used for automated testing and automated scrapping of data of web pages'}
     ]
     return render_template('index.html', title='Home', pkgs=pkgs)
 
