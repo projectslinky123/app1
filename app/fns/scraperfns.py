@@ -11,7 +11,7 @@ def getpagedata(url):
     driver.get(url)
 
     # this is just to ensure that the page is loaded
-    # time.sleep(2)
+    time.sleep(3)
 
     html = driver.page_source
 
