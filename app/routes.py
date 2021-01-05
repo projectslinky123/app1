@@ -20,7 +20,7 @@ def index():
     pkgs = [
         {'name': 'beautifulsoup4',
          'use': 'Data extraction',
-         'description': 'Beautiful Soup is a Python library for pulling data out of HTML and XML files'}
+         'description': 'Beautiful Soup is a Python library for pulling data out of HTML and XML files'},
         {'name': 'flask',
          'use': 'Base Framework',
          'description': 'Base Framework'},
