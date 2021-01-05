@@ -17,12 +17,13 @@
         <p>Packages Used:
             <div class="container">
             <table class="table table-hover table-sm">
-                <tr><th class="col-sm-2">Package Name</th><th class="col-sm-2">Used For</th><th class="col-sm-8">Description</th></tr>
+                <tr><th class="col-sm-2">Package Name</th><th class="col-sm-2">Used For</th><th class="col-sm-8">Description</th><th class="col-sm-8">Website</th></tr>
                 {% for row in pkgs %}
                 <tr>
                     <td>{{ row["name"] }}</td>
                     <td>{{ row["use"] }}</td>
                     <td>{{ row["description"] }}</td>
+                    <td>{{ row["website"] }}</td>
                 </tr>
                 {% endfor %}
             </table>
