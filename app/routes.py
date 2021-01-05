@@ -43,7 +43,7 @@ def index():
          'use': 'Scrapping page data',
          'description': 'Selenium WebDriver drives a browser natively, as a real user would, either locally or on remote machines.It is most used for automated testing and automated scrapping of data of web pages'}
     ]
-    return render_template('index.html', title='Home', pkgs=pkgs)
+    return render_template('index.html', title='Home', pkgs=pkgs, projectdesc="Seleium webdriver is used to download the page data and then beautifulsoup is used to extract the table from the downloaded HTML data. Pandas is then used for data transformations before being displayed on the page.")
 
 
 @app.route('/contactme')
