@@ -2,6 +2,7 @@
 def getpagedata(url):
     from selenium import webdriver
     from fake_useragent import UserAgent
+    import time
 
     # initiating the webdriver. Parameter includes the path of the webdriver.
     options = webdriver.ChromeOptions()
