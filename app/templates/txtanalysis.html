@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <h2>Text Analysis</h2><br>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.inputtext.label }}<br>
+            {{ form.inputtext(cols=50, rows=4) }}<br>
+            {% for error in form.inputtext.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form> <br><br>
+</div>
+
+<div class="container">
+    <Big><Big>Report Output</Big> </Big> {{ url }}
+    <div class="text-center">
+    </div>
+</div>
+<br>
+<div class="container">
+    <table>
+        {% for i in data %}
+        <tr>
+            <td>{% if dataprefix %}{{ dataprefix }}{% endif %}
+                {{ i }}{% if dataprefix %}:{% endif %}
+                {{ data[i] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

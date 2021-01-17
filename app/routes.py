@@ -6,6 +6,9 @@ import os
 import time
 from datetime import datetime
 from app.fns.scraperfns import tabledatatodf, cleanupdata, getpagedata
+from app.fns.graphfns import create_figure
+from app.fns.otherfns import textanalysis
+from app.forms import InputText
 
 import matplotlib.pyplot as plt
 import requests
@@ -13,6 +16,7 @@ from app import app
 from flask import render_template
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from bs4 import BeautifulSoup
+
 
 @app.route('/')
 @app.route('/index')
@@ -95,6 +99,20 @@ def scraper():
                            , url=url, data=df, projectdesc="Seleium webdriver is used to download the page data and then beautifulsoup is used to extract the table from the downloaded HTML data. Pandas is then used for data transformations before being displayed on the page.")
 
 
+@app.route('/txtanalysis', methods=['GET', 'POST'])
+def txtanalysis():
+    form = InputText()
+    txt = form.inputtext.data
+    if txt is None or len(txt) == 0:
+        data = {"Text is an empty string"}
+        dataprefix = None
+    else:
+        data = textanalysis(txt)
+        dataprefix = "Number of"
+    return render_template('txtanalysis.html', title="Text Analysis Report", dataprefix = dataprefix
+                           , data= data, form=form)
+
+
 @app.route('/aboutproject')
 def aboutproject():
     projectdata = [
@@ -152,34 +170,6 @@ def aboutme():
          }
     ]
     return render_template('myresume.html', title='About me', user=user, workexp=workexp, education=education)
-
-
-def create_figure(xtitle, ytitle, x, y):
-    fig = plt.figure(figsize=(15, 5))
-    axis = fig.add_subplot(1, 1, 1)
-    axis.set_xlabel(xtitle)
-    axis.set_ylabel(ytitle)
-    axis.grid()
-    axis.plot(list(map(int, y)))
-    xlabels = [""]
-    xticks = [0]
-    spacing = len(x)//10
-    for i in range(11):
-        xticks.append(spacing*i)
-        xlabels.append(x[spacing*i])
-
-    axis.set_xticks(xticks)
-    axis.set_xticklabels(xlabels, rotation=70)
-    fig.tight_layout()
-
-    # Convert plot to PNG image
-    pngImage = io.BytesIO()
-    FigureCanvas(fig).print_png(pngImage)
-
-    # Encode PNG image to base64 string
-    pngImageB64String = "data:image/png;base64,"
-    pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
-    return pngImageB64String
 
 
 def getgraphdata(seriesId):
