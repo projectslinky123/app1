@@ -96,7 +96,7 @@ def scraper():
     df.columns = df.columns.to_series().apply(cleanupdata)
     df = df.applymap(cleanupdata)
     return render_template('scraper.html', title="Data scrapped from wikipedia"
-                           , url=url, data=df, projectdesc="Seleium webdriver is used to download the page data and then beautifulsoup is used to extract the table from the downloaded HTML data. Pandas is then used for data transformations before being displayed on the page.")
+                           , url=url, data=df, projectdesc="<p>The Seleium webdriver along the a headless chrome browser is used to download the page data and then beautifulsoup is used to extract the first table from the downloaded HTML data.</p><p>Pandas is then used for data transformations before being displayed on the page.</p>")
 
 
 @app.route('/txtanalysis', methods=['GET', 'POST'])
