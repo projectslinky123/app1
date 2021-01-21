@@ -107,6 +107,7 @@ def txtanalysis():
         data = {"Text is an empty string"}
         dataprefix = None
     else:
+        txt = txt.replace("\r\n", "\n")
         data = textanalysis(txt)
         dataprefix = "Number of"
     return render_template('txtanalysis.html', title="Text Analysis Report", dataprefix = dataprefix
