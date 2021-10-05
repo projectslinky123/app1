@@ -83,14 +83,24 @@ def graph():
     return render_template('testgraph.html', title=title, data=data["observations"]
                            , val=data, fig=fig, projectdesc="Data retreived from https://api.stlouisfed.org/fred. The graph is built using the matplotlib package")
 
+@app.route('/scrapertest')
+def scrapertest():
+    url = "https://en.wikipedia.org/wiki/List_of_countries_by_beer_consumption_per_capita"
+    html = getpagedata(url)
+    soup = BeautifulSoup(html, "html.parser")
+    tabledata = soup.find('table', {'class': 'wikitable sortable mw-datatable static-row-numbers jquery-tablesorter'})
+
+    return render_template('test.html', title="Data scrapped from wikipedia"
+                           , url=url, data=tabledata)
+
 
 @app.route('/scraper')
 def scraper():
-    url = "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)"
+    url = "https://en.wikipedia.org/wiki/List_of_countries_by_beer_consumption_per_capita"
     html = getpagedata(url)
 
     soup = BeautifulSoup(html, "html.parser")
-    tabledata = soup.find('table', {'class': 'wikitable sortable jquery-tablesorter'})
+    tabledata = soup.find('table', {'class': 'wikitable sortable mw-datatable static-row-numbers jquery-tablesorter'})
 
     df = tabledatatodf(tabledata)
     df.columns = df.columns.to_series().apply(cleanupdata)
