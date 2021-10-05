@@ -1,4 +1,7 @@
-
+import matplotlib.pyplot as plt
+import io
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import base64
 
 def create_figure(xtitle, ytitle, x, y):
     fig = plt.figure(figsize=(15, 5))
