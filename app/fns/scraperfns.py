@@ -33,7 +33,7 @@ def getpagedata(url):
     driver.get(url)
 
     # this is just to ensure that the page is loaded
-    time.sleep(7)
+    time.sleep(5)
 
     html = driver.page_source
     driver.close()  # closing the webdriver
