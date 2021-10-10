@@ -1,7 +1,10 @@
 def getspan(html, dataproperty):
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(html, "html.parser")
-    return soup.find('span', dataproperty).get_text()
+    if soup is None or len(soup) == 0:
+        return "Stock Ticker data cannot be found"
+    else:
+        return soup.find('span', dataproperty).get_text()
 
 
 def getdf(html, tableproperty):

@@ -110,7 +110,7 @@ def scraper():
 
         html = getpagedata(url)
         if html is None or len(html) == 0:
-            df = {"Ticker is invalid or data on the ticket cannot be found"}
+            df = pd.DataFrame(["Ticker is invalid or data on the ticket cannot be found"], columns=['Error'])  # {"Ticker is invalid or data on the ticket cannot be found"}
         else:
             dataproperty = {'class': 'symbol-page-header__name'}
             stockName = getspan(html, dataproperty)
