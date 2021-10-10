@@ -4,12 +4,13 @@ import json
 import math
 import os
 import time
+import re
 from datetime import datetime
-from app.fns.scraperfns import tabledatatodf, cleanupdata, getpagedata
+from app.fns.scraperfns import cleanupdata, getpagedata, getdf, getspan
 from app.fns.graphfns import create_figure
 from app.fns.otherfns import textanalysis
-from app.forms import InputText
-
+from app.forms import InputText, InputTicker
+import pandas as pd
 import matplotlib.pyplot as plt
 import requests
 from app import app
@@ -85,28 +86,44 @@ def graph():
 
 @app.route('/scrapertest')
 def scrapertest():
-    url = "https://en.wikipedia.org/wiki/List_of_countries_by_beer_consumption_per_capita"
+    url = "https://www.nasdaq.com/market-activity/stocks/fun/latest-real-time-trades"
     html = getpagedata(url)
     soup = BeautifulSoup(html, "html.parser")
-    tabledata = soup.find('table', {'class': 'wikitable sortable mw-datatable static-row-numbers jquery-tablesorter'})
+    tabledata = soup.find('table', {'class': 'latest-real-time-trades__table'})
 
     return render_template('test.html', title="Data scrapped from wikipedia"
                            , url=url, data=tabledata)
 
 
-@app.route('/scraper')
+@app.route('/scraper', methods=['GET', 'POST'])
 def scraper():
-    url = "https://en.wikipedia.org/wiki/List_of_countries_by_beer_consumption_per_capita"
-    html = getpagedata(url)
+    url = "https://www.nasdaq.com/market-activity/stocks/{{ticker}}/latest-real-time-trades"
+    form = InputTicker()
+    txt = form.ticker.data
+    stockName = ""
+    if txt is None or len(txt) == 0:
+        df = {"Text is an empty string"}
+    else:
+        txt = txt.replace("\r\n", "\n")
+        txt = re.sub('[^A-Za-z0-9]+', '', txt)
+        url = url.replace("{{ticker}}", txt)
 
-    soup = BeautifulSoup(html, "html.parser")
-    tabledata = soup.find('table', {'class': 'wikitable sortable mw-datatable static-row-numbers jquery-tablesorter'})
+        html = getpagedata(url)
+        if html is None or len(html) == 0:
+            df = {"Ticker is invalid or data on the ticket cannot be found"}
+        else:
+            dataproperty = {'class': 'symbol-page-header__name'}
+            stockName = getspan(html, dataproperty)
+            tableproperty = {'class': 'latest-real-time-trades__table'}
+            df = getdf(html, tableproperty)
+            df.columns = df.columns.to_series().apply(cleanupdata)
+            df = df.applymap(cleanupdata)
 
-    df = tabledatatodf(tabledata)
-    df.columns = df.columns.to_series().apply(cleanupdata)
-    df = df.applymap(cleanupdata)
-    return render_template('scraper.html', title="Data scrapped from wikipedia"
-                           , url=url, data=df, projectdesc="<p>The Seleium webdriver along with a headless chrome browser is used to download the page data and then beautifulsoup is used to extract the first table from the downloaded HTML data.</p><p>Pandas is then used for data transformations before being displayed on the page.</p>")
+    res = isinstance(df, pd.DataFrame)
+    return render_template('scraper.html', title="Data scrapped from Nasdaq"
+                           , url=url, results=res, stockName=stockName, data=df
+                           , projectdesc="<p>The Seleium webdriver along with a headless chrome browser is used to download the page data</P><p>Beautifulsoup is then used to extract the real time trades table from the downloaded HTML data.</p><p>Pandas is then used for data transformations before the results are displayed on the page.</p><p>'NLS' in the results stands for Nasdaq Last Sale</p>"
+                           , form=form)
 
 
 @app.route('/txtanalysis', methods=['GET', 'POST'])
@@ -120,8 +137,8 @@ def txtanalysis():
         txt = txt.replace("\r\n", "\n")
         data = textanalysis(txt)
         dataprefix = "Number of"
-    return render_template('txtanalysis.html', title="Text Analysis Report", dataprefix = dataprefix
-                           , data= data, form=form)
+    return render_template('txtanalysis.html', title="Text Analysis Report", dataprefix=dataprefix
+                           , data=data, form=form)
 
 
 @app.route('/aboutproject')

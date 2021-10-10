@@ -1,3 +1,20 @@
+def getspan(html, dataproperty):
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+    return soup.find('span', dataproperty).get_text()
+
+def getdf(html, tableproperty):
+    import pandas as pd
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html, "html.parser")
+    if soup is None or len(soup) == 0:
+        errorlist = ['table data not found']
+        return pd.DataFrame(errorlist, columns=['Error'])
+    else:
+        tabledata = soup.find('table', tableproperty)
+        return tabledatatodf(pd, tabledata)
+
 
 def getpagedata(url):
     from selenium import webdriver
@@ -12,10 +29,9 @@ def getpagedata(url):
     driver.get(url)
 
     # this is just to ensure that the page is loaded
-    time.sleep(5)
+    time.sleep(3)
 
     html = driver.page_source
-
     driver.close()  # closing the webdriver
     return html
 
@@ -24,15 +40,14 @@ def cleanupdata(x):
     return str(x).replace('\n', '').replace('$', '').strip()
 
 
-def tabledatatodf(tabledata):
-    import pandas as pd
+def tabledatatodf(pd, tabledata):
     list_header = []
     if tabledata.find(["tr"]):
         elements = tabledata.find(["tr"])
     elif tabledata.find(["thead"]).find(["tr"]):
         elements = tabledata.find(["tr"])
     else:
-        return ""
+        return pd.DataFrame()
 
     for items in elements:
         try:

@@ -2,13 +2,34 @@
 
 {% block app_content %}
 <div class="container">
-    <Big><Big>Table scraped from </Big> </Big> {{ url }}
+    <h3>Get Last 20 Real Time Trades from Nasdaq for a stock</h3><br>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.ticker.label }}<br>
+            {{ form.ticker(cols=7, rows=4) }}<br>
+            {% for error in form.ticker.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+
+    </form>Sample Ticker Values: AAPL, MSFT, V, GOOGL, AMZN <br>
+            <small>Note: The scrapper takes about 5-15 seconds to get and display the results.</small> <br>
+</div>
+<hr>
+<div class="container">
+    {% if results %}
+    <h3>Results for {{ stockName }} </h3>
+    <Big>Table scraped from </Big> <a href="{{ url }}">{{ url }}</a>
+    {% endif %}
     <div class="text-center">
     </div>
 </div>
 <br>
 <div class="container">
-    {{ data.to_html(index=False, classes="table table-hover table-sm")|safe }}
+    {% if results %}{{ data.to_html(index=False, classes="table table-hover table-sm")|safe }}
+    {% endif %}
 </div>
 
 {% endblock %}
