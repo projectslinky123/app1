@@ -125,7 +125,6 @@ def scraper():
                            , projectdesc="<p>The Seleium webdriver along with a headless chrome browser is used to download the page data</P><p>Beautifulsoup is then used to extract the real time trades table from the downloaded HTML data.</p><p>Pandas is then used for data transformations before the results are displayed on the page.</p><p>'NLS' in the results stands for Nasdaq Last Sale</p>"
                            , form=form)
 
-
 @app.route('/txtanalysis', methods=['GET', 'POST'])
 def txtanalysis():
     form = InputText()

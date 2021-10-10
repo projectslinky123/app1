@@ -3,6 +3,7 @@ def getspan(html, dataproperty):
     soup = BeautifulSoup(html, "html.parser")
     return soup.find('span', dataproperty).get_text()
 
+
 def getdf(html, tableproperty):
     import pandas as pd
     from bs4 import BeautifulSoup
