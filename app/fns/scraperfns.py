@@ -40,11 +40,11 @@ def getpagedata(url):
     options.add_argument(f'user-agent={UserAgent().random}')
     options.headless = True
     driver = webdriver.Chrome('./app/browsers/chromedriver', options=options)
-    driver.implicitly_wait(15)
+    driver.implicitly_wait(25)
     driver.get(url)
 
     # this is just to ensure that the page is loaded
-    time.sleep(15)
+  #  time.sleep(15)
 
     html = driver.page_source
     driver.close()  # closing the webdriver
