@@ -4,7 +4,13 @@ def getspan(html, dataproperty):
     if soup is None or len(soup) == 0:
         return "Stock Ticker data cannot be found"
     else:
-        return soup.find('span', dataproperty).get_text()
+        n = soup.find('span', dataproperty)
+        if n is None or len(n) == 0:
+            return "Stock Ticker data cannot be found"
+        else:
+            return n.get_text()
+
+
 
 
 def getdf(html, tableproperty):
@@ -17,7 +23,11 @@ def getdf(html, tableproperty):
         return pd.DataFrame(errorlist, columns=['Error'])
     else:
         tabledata = soup.find('table', tableproperty)
-        return tabledatatodf(pd, tabledata)
+        if tabledata is None or len(tabledata) == 0:
+            errorlist = ['table data not found']
+            return pd.DataFrame(errorlist, columns=['Error'])
+        else:
+            return tabledatatodf(pd, tabledata)
 
 
 def getpagedata(url):
@@ -79,3 +89,24 @@ def tabledatatodf(pd, tabledata):
     # DataFrame
     df = pd.DataFrame(data=data, columns=list_header)
     return df
+
+
+
+def getpagedata2(url):
+    from selenium import webdriver
+    from fake_useragent import UserAgent
+    import time
+
+    # initiating the webdriver. Parameter includes the path of the webdriver.
+    options = webdriver.ChromeOptions()
+    options.add_argument(f'user-agent={UserAgent().random}')
+    options.headless = True
+    driver = webdriver.Remote(desired_capabilities=webdriver.DesiredCapabilities.HTMLUNIT)
+    driver.get(url)
+
+    # this is just to ensure that the page is loaded
+    time.sleep(5)
+
+    html = driver.page_source
+    driver.close()  # closing the webdriver
+    return html

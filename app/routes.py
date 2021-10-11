@@ -6,7 +6,7 @@ import os
 import time
 import re
 from datetime import datetime
-from app.fns.scraperfns import cleanupdata, getpagedata, getdf, getspan
+from app.fns.scraperfns import cleanupdata, getpagedata, getdf, getspan, getpagedata2
 from app.fns.graphfns import create_figure
 from app.fns.otherfns import textanalysis
 from app.forms import InputText, InputTicker
@@ -87,12 +87,12 @@ def graph():
 @app.route('/scrapertest')
 def scrapertest():
     url = "https://www.nasdaq.com/market-activity/stocks/fun/latest-real-time-trades"
-    html = getpagedata(url)
-    soup = BeautifulSoup(html, "html.parser")
-    tabledata = soup.find('table', {'class': 'latest-real-time-trades__table'})
+    html = getpagedata2(url)
+ #   soup = BeautifulSoup(html, "html.parser")
+ #   tabledata = soup.find('table', {'class': 'latest-real-time-trades__table'})
 
     return render_template('test.html', title="Data scrapped from wikipedia"
-                           , url=url, data=tabledata)
+                           , url=url, data=html)
 
 
 @app.route('/scraper', methods=['GET', 'POST'])
